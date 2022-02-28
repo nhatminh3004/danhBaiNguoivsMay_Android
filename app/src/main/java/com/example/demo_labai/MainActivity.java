@@ -15,6 +15,9 @@ import com.daimajia.androidanimations.library.YoYo;
 public class MainActivity extends AppCompatActivity {
     int Source_nguoi=0;
     int  Source_may=0;
+    int [] value_nguoi;
+    int [] value_may;
+
     int manghinhbai[]={
             R.drawable.c1,R.drawable.c2,R.drawable.c3,R.drawable.c4,R.drawable.c5,
             R.drawable.c6,R.drawable.c7,R.drawable.c8,R.drawable.c9,R.drawable.c10,
@@ -51,30 +54,30 @@ public class MainActivity extends AppCompatActivity {
         buttonChiaBai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    int [] giatri=lay3songaunhien(0,51);
 
-                int [] value_nguoi= lay3songaunhien(0,51);
 
                 YoYo.with(Techniques.SlideInRight).duration(1000).repeat(0).playOn(hinh1);
                 YoYo.with(Techniques.SlideInRight).duration(1200).repeat(0).playOn(hinh2);
                 YoYo.with(Techniques.SlideInRight).duration(1400).repeat(0).playOn(hinh3);
-                hinh1.setImageResource(manghinhbai[value_nguoi[0]]);
-
-                hinh2.setImageResource(manghinhbai[value_nguoi[1]]);
-                hinh3.setImageResource(manghinhbai[value_nguoi[2]]);
-                String kq_nguoi=tinhSoNut(value_nguoi);
+                hinh1.setImageResource(manghinhbai[giatri[0]]);
+                hinh2.setImageResource(manghinhbai[giatri[1]]);
+                hinh3.setImageResource(manghinhbai[giatri[2]]);
+                String kq_nguoi=tinhSoNutofNguoi(giatri);
                 textViewKetQua_nguoi.setText(kq_nguoi);
 
-                int [] value_may= lay3songaunhien(0,51);
+
                 YoYo.with(Techniques.SlideInRight).duration(1000).repeat(0).playOn(hinh4);
                 YoYo.with(Techniques.SlideInRight).duration(1200).repeat(0).playOn(hinh5);
                 YoYo.with(Techniques.SlideInRight).duration(1400).repeat(0).playOn(hinh6);
-                hinh4.setImageResource(manghinhbai[value_may[0]]);
-                hinh5.setImageResource(manghinhbai[value_may[1]]);
-                hinh6.setImageResource(manghinhbai[value_may[2]]);
-                String kq_may=tinhSoNut(value_may);
+                hinh4.setImageResource(manghinhbai[giatri[3]]);
+                hinh5.setImageResource(manghinhbai[giatri[4]]);
+                hinh6.setImageResource(manghinhbai[giatri[5]]);
+
+                String kq_may=tinhSoNutofMay(giatri);
                 textviewKetQua_may.setText(kq_may);
-                int lanthangofnguoi=tinhThangThua(value_nguoi);
-                int lanthangofmay= tinhThangThua(value_may);
+                int lanthangofnguoi=tinhThangThua_of_Nguoi(giatri);
+                int lanthangofmay= tinhThangThua_of_May(giatri);
                 if(lanthangofnguoi>lanthangofmay){
                     Toast.makeText(MainActivity.this, "Người chơi thắng", Toast.LENGTH_SHORT).show();
                     Source_nguoi++;
@@ -100,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Hàm tính thắng thua
-    private int tinhThangThua(int [] a){
+    private int tinhThangThua_of_Nguoi(int [] a){
         int nut=0;
-        if(tinhsoBaiTay(a) ==3)
+        if(tinhsoBaiTayofNguoi(a) ==3)
             nut=10;
         else {
             int temp=0;
-            for(int i=0;i<a.length;i++)
+            for(int i=0;i<a.length-3;i++)
 
                 if(a[i] %13 <10)
                     temp=temp+(a[i]%13 +1);
@@ -116,36 +119,79 @@ public class MainActivity extends AppCompatActivity {
         }
         return nut;
     }
-    //hàm tính số nút
-    private String tinhSoNut(int[] a){
+    private int tinhThangThua_of_May(int [] a){
+        int nut=0;
+        if(tinhsoBaiTayofMay(a) ==3)
+            nut=10;
+        else {
+            int temp=0;
+            for(int i=3;i<a.length;i++)
+
+                if(a[i] %13 <10)
+                    temp=temp+(a[i]%13 +1);
+            nut=temp%10;
+            if(temp %10 ==0)
+                nut=0;
+        }
+        return nut;
+    }
+
+
+
+    private String tinhSoNutofNguoi(int[] a){
         String ketqua="";
-        if(tinhsoBaiTay(a) == 3)
+        if(tinhsoBaiTayofNguoi(a) == 3)
             ketqua="3 cào";
         else {
             int tongsonut=0;
-            for(int i=0;i<a.length;i++)
+            for(int i=0;i<a.length-3;i++)
                 if(a[i] %13 <10)
                     tongsonut=tongsonut+(a[i]%13 +1);
                 if(tongsonut %10 ==0 )
-                    ketqua ="kết quả bù, trong đó có "+tinhsoBaiTay(a)+"tây";
+                    ketqua ="kết quả bù, trong đó có "+tinhsoBaiTayofNguoi(a)+"tây";
                 else {
-                    ketqua=(tongsonut%10)+"\tnút , "+"trong đó có:"+tinhsoBaiTay(a)+"tây";
+                    ketqua=(tongsonut%10)+"\tnút , "+"trong đó có:"+tinhsoBaiTayofNguoi(a)+"tây";
                 }
+        }
+        return ketqua;
+    }
+    private String tinhSoNutofMay(int[] a){
+        String ketqua="";
+        if(tinhsoBaiTayofMay(a) == 3)
+            ketqua="3 cào";
+        else {
+            int tongsonut=0;
+            for(int i=3;i<a.length;i++)
+                if(a[i] %13 <10)
+                    tongsonut=tongsonut+(a[i]%13 +1);
+            if(tongsonut %10 ==0 )
+                ketqua ="kết quả bù, trong đó có "+tinhsoBaiTayofMay(a)+"tây";
+            else {
+                ketqua=(tongsonut%10)+"\tnút , "+"trong đó có:"+tinhsoBaiTayofMay(a)+"tây";
+            }
         }
         return ketqua;
     }
 
     //hàm kiểm tra lá bài tây
-    private int tinhsoBaiTay(int [] a){
+    private int tinhsoBaiTayofNguoi(int [] a){
         int k=0;
-        for(int i=0;i<a.length;i++)
+        for(int i=0;i<a.length-3;i++)
             if(a[i]%13 >=10 && a[i]%13 <13)
                 k++;
             return k;
     }
+    private int tinhsoBaiTayofMay(int [] a){
+        int k=0;
+        for(int i=3;i<a.length;i++)
+            if(a[i]%13 >=10 && a[i]%13 <13)
+                k++;
+        return k;
+    }
+
     //hàm lấy 3 số ngẫu nhiên
     private int[] lay3songaunhien(int min, int max){
-        int [] baso = new int[3];
+        int [] baso = new int[6];
         int i=0;
         baso[i++] = random(min, max);
         do {
@@ -153,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             if(!kiemTraTrung(k,baso)){
                 baso[i++]=k;
             }
-        }while (i<3);
+        }while (i<6);
         return baso;
     }
     //ham random
@@ -167,5 +213,16 @@ public class MainActivity extends AppCompatActivity {
             if(a[i] ==k)
                 return true;
                 return false;
+    }
+    private boolean kiemTraTrung2Mang( int [] a , int [] b){
+        for(int i=0;i<a.length;i++)
+            for(int y=0;y<b.length;y++){
+                if(a[i]==b[y]){
+                    return true;
+                }
+            }
+        return false;
+
+
     }
 }
