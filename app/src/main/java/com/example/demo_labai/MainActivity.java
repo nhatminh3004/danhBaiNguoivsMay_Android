@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     int  Source_may=0;
     int [] value_nguoi;
     int [] value_may;
-
+//Minhdeptrai
     int manghinhbai[]={
             R.drawable.c1,R.drawable.c2,R.drawable.c3,R.drawable.c4,R.drawable.c5,
             R.drawable.c6,R.drawable.c7,R.drawable.c8,R.drawable.c9,R.drawable.c10,
